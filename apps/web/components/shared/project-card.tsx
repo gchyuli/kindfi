@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { useProjectMeta } from '~/hooks/use-project-meta'
 import type { Project } from '~/lib/types/projects.types'
 import { cn } from '~/lib/utils'
 import { RenderCategories, RenderTags } from '~/lib/utils/categories-util'
@@ -11,6 +12,8 @@ interface ProjectCardProps {
 }
 
 function ProjectCard({ project, viewMode = 'grid' }: ProjectCardProps) {
+	const { tags, categories, loading } = useProjectMeta(String(project.id))
+
 	const percentageComplete =
 		project.percentage_complete ??
 		(project.current_amount >= 0 && project.target_amount > 0
@@ -63,7 +66,7 @@ function ProjectDetails({
 				<RenderCategories categories={project.categories || []} />
 			</div>
 
-			<div className={'p-5 flex-1'}>
+			<div className="p-5 flex-1">
 				<h3 className="text-lg font-semibold mb-2">{project.title}</h3>
 				<p className="text-gray-600 mb-4 line-clamp-2 text-sm">
 					{project.description}
